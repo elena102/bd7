@@ -1,0 +1,36 @@
+ЗАДАНИЕ 1
+
+CREATE VIEW courses_info AS
+   ...> SELECT
+   ...> courses.name AS course_name,
+   ...> MAX(streams.number),
+   ...> MAX(streams.started_at),
+   ...> AVG(grades.grade)
+   ...> FROM streams
+   ...> LEFT JOIN grades
+   ...> ON grades.stream_id = streams.id
+   ...> LEFT JOIN courses
+   ...> ON courses.id = streams.course_id
+   ...> GROUP BY course_id;
+
+ЗАДАНИЕ 2
+
+BEGIN TRANSACTION;
+sqlite> DELETE FROM grades WHERE teacher_id = 3;
+sqlite> DELETE FROM teachers WHERE id = 3;
+sqlite> COMMIT;
+
+
+ЗАДАНИЕ 3
+
+CREATE TRIGGER check_grade_format BEFORE INSERT
+   ...> ON grades
+   ...> BEGIN
+   ...> SELECT CASE
+   ...> WHEN
+   ...> (NEW.grade NOT BETWEEN 0 AND 5)
+   ...> THEN
+   ...> RAISE(ABORT,'Incorrect rating value!')
+   ...> END;
+   ...> END;
+
